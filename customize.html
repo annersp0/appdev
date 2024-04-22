@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Customize Your Skincare Routine</title>
+<meta charset="UTF-8">
+<link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+
+<style>
+body {font-family: "Times New Roman", Georgia, Serif;}
+h1, h2, h3, h4, h5, h6 {
+  font-family: "Playfair Display";
+  letter-spacing: 5px;
+}
+.container {
+  margin-top: 50px;
+  text-align: center;
+}
+.form-group {
+  margin-bottom: 20px;
+}
+</style>
+
+</head>
+<body>
+
+<div class="w3-top">
+  <div class="w3-bar w3-white w3-padding w3-card" style="letter-spacing:4px;">
+    <div class="w3-right w3-hide-small">
+        <a href="home.html" class="w3-bar-item w3-button">About</a>
+        <a href="skintype.html" class="w3-bar-item w3-button">Skin Type</a>
+        <a href="customize.html" class="w3-bar-item w3-button">Customize</a>
+        <a href="#" id="logout" class="w3-bar-item w3-button" onclick="confirmLogout()"><i class="fa fa-sign-out"></i></a>
+      </div>
+  </div>
+</div><br>
+
+<div class="container">
+  <h1><b>Create your own skincare routine</h1></b>
+  <form id="skincareForm">
+    <div class="form-group">
+      <label for="step">Title:</label>
+      <input type="text" class="form-control" id="step" name="step" required>
+    </div>
+    <div class="form-group">
+      <label for="description">Description:</label>
+      <textarea class="form-control" id="description" name="description" rows="4" required></textarea>
+    </div>
+    <button type="submit" class="btn btn-primary">Add Routine</button>
+  </form><br>
+  <hr>
+  <ul id="skincareList" class="list-group">
+  </ul>
+</div><br>
+
+<footer class="col-lg-12 w3-light-grey w3-padding-32" id="contact">
+    <h1 class="text-center">Contact</h1>
+    <p class="text-center">For the love of beauty — let's get in touch. Send us a message: <i class="fa fa-envelope-open fa-fw w3-text-black w3-large"></i> skinserenity@gmail.com</p>
+</footer>
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+
+<script>
+$(document).ready(function() {
+  let skincareRoutine = [];
+
+  function addStep(step, description) {
+    skincareRoutine.push({ step, description });
+    renderSkincareList();
+  }
+
+  function renderSkincareList() {
+    $('#skincareList').empty();
+    skincareRoutine.forEach((item, index) => {
+      $('#skincareList').append(`
+        <li class="list-group-item">
+          <div class="d-flex justify-content-between align-items-center">
+            <div>
+              <h5 class="mb-0">${item.step}</h5>
+              <p class="mb-0">${item.description}</p>
+            </div>
+            <div>
+              <button type="button" class="btn btn-sm btn-secondary edit-btn" data-index="${index}"><i class="fa fa-pencil"></i> Edit</button>
+              <button type="button" class="btn btn-sm btn-danger delete-btn" data-index="${index}"><i class="fa fa-trash"></i> Delete</button>
+            </div>
+          </div>
+        </li>
+      `);
+    });
+  }
+
+  $('#skincareForm').submit(function(event) {
+    event.preventDefault();
+    const step = $('#step').val();
+    const description = $('#description').val();
+    addStep(step, description);
+    $('#step').val('');
+    $('#description').val('');
+  });
+
+  $(document).on('click', '.delete-btn', function() {
+    const index = $(this).data('index');
+    skincareRoutine.splice(index, 1);
+    renderSkincareList();
+  });
+
+  $(document).on('click', '.edit-btn', function() {
+    const index = $(this).data('index');
+    const step = skincareRoutine[index].step;
+    const description = skincareRoutine[index].description;
+    $('#step').val(step);
+    $('#description').val(description);
+    skincareRoutine.splice(index, 1);
+    renderSkincareList();
+  });
+});
+
+  function confirmLogout() {
+    if (confirm("Are you sure you want to logout?")) {
+      window.location.href = "index.html";
+    }
+  }
+</script>
+
+</body>
+</html>
